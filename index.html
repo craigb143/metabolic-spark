@@ -3,233 +3,267 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>12% Metabolic Spark — 5-Day Tiny Habit Challenge</title>
+<title>12% Metabolic Spark — 50-Day Habit Stack</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Syne:wght@400;500;700;800&family=Syne+Mono&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Syne',sans-serif;background:#0B1A12;color:#fff;padding:16px 16px 60px;max-width:500px;margin:0 auto;}
-.brand{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;color:#fff;margin-bottom:1px;}
+.brand{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:700;color:#fff;margin-bottom:1px;}
 .brand span{color:#C8A95B;}
-.sub{font-family:'Syne Mono',monospace;font-size:8px;letter-spacing:0.3em;color:#C8A95B;text-transform:uppercase;margin-bottom:4px;display:block;}
-.credit{font-family:'Syne Mono',monospace;font-size:7px;color:rgba(255,255,255,0.2);margin-bottom:20px;display:block;letter-spacing:0.1em;}
-.credit a{color:rgba(200,169,91,0.4);text-decoration:none;}
+.sub{font-family:'Syne Mono',monospace;font-size:8px;letter-spacing:0.3em;color:#C8A95B;text-transform:uppercase;margin-bottom:3px;display:block;}
+.credit{font-family:'Syne Mono',monospace;font-size:7px;color:rgba(255,255,255,0.15);margin-bottom:16px;display:block;}
+.credit a{color:rgba(200,169,91,0.35);text-decoration:none;}
+.nav{display:flex;gap:0;border-bottom:1px solid rgba(200,169,91,0.2);margin-bottom:18px;}
+.nav-btn{flex:1;padding:10px 4px;font-family:'Syne Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;text-align:center;cursor:pointer;color:rgba(255,255,255,0.3);border:none;background:none;border-bottom:2px solid transparent;transition:all 0.2s;}
+.nav-btn.active{color:#C8A95B;border-bottom-color:#C8A95B;}
+.screen{display:none;}.screen.show{display:block;}
+.progress-bar-wrap{background:rgba(255,255,255,0.05);height:6px;margin:8px 0 4px;}
+.progress-bar-fill{background:linear-gradient(90deg,#1D9E75,#C8A95B);height:6px;transition:width 0.6s ease;}
+.progress-label{font-family:'Syne Mono',monospace;font-size:8px;color:rgba(255,255,255,0.3);letter-spacing:0.1em;}
+.stack-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:16px;}
+.stack-card{padding:12px;border:1px solid rgba(255,255,255,0.06);background:#0B1A12;cursor:pointer;transition:all 0.15s;position:relative;}
+.stack-card.complete{border-color:#1D9E75;background:rgba(29,158,117,0.06);}
+.stack-card.active-challenge{border-color:#C8A95B;background:rgba(200,169,91,0.06);}
+.stack-card.locked{opacity:0.3;cursor:default;}
+.sc-num{font-family:'Syne Mono',monospace;font-size:8px;color:#C8A95B;margin-bottom:4px;}
+.sc-emoji{font-size:18px;margin-bottom:4px;}
+.sc-title{font-size:11px;font-weight:700;color:#fff;line-height:1.3;margin-bottom:4px;}
+.sc-status{font-family:'Syne Mono',monospace;font-size:7px;color:rgba(255,255,255,0.25);text-transform:uppercase;}
+.sc-status.done{color:#5DCAA5;}.sc-status.active{color:#C8A95B;}
+.sc-days{display:flex;gap:2px;margin-top:6px;}
+.sc-day-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.1);}
+.sc-day-dot.done{background:#1D9E75;}
+.sc-badge{position:absolute;top:8px;right:8px;font-size:14px;}
+.big-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:16px;}
+.bs{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.05);padding:10px;text-align:center;}
+.bs-val{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:700;color:#C8A95B;}
+.bs-lbl{font-family:'Syne Mono',monospace;font-size:7px;color:rgba(255,255,255,0.2);text-transform:uppercase;margin-top:2px;}
 .step{display:none;}.step.show{display:block;}
-.step-label{font-family:'Syne Mono',monospace;font-size:8px;letter-spacing:0.25em;color:#C8A95B;text-transform:uppercase;margin-bottom:6px;}
-.step-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;margin-bottom:4px;color:#fff;}
-.step-hint{font-size:12px;color:rgba(255,255,255,0.4);margin-bottom:6px;line-height:1.5;}
-.fogg-line{font-family:'Syne Mono',monospace;font-size:9px;color:#C8A95B;letter-spacing:0.05em;margin-bottom:16px;padding:8px 12px;border-left:2px solid #C8A95B;background:rgba(200,169,91,0.05);}
-.hlist{display:flex;flex-direction:column;gap:5px;margin-bottom:14px;}
-.hrow{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border:1px solid rgba(255,255,255,0.07);cursor:pointer;transition:all 0.15s;user-select:none;background:#0B1A12;}
-.hrow:hover{border-color:rgba(200,169,91,0.4);background:rgba(200,169,91,0.03);}
-.hrow.sel{border-color:#C8A95B;background:rgba(200,169,91,0.08);}
-.hrow-left{display:flex;flex-direction:column;align-items:center;flex-shrink:0;width:28px;}
-.hrow-num{font-family:'Syne Mono',monospace;font-size:8px;color:#C8A95B;margin-bottom:3px;}
-.hrow-emoji{font-size:16px;line-height:1;}
+.step-label{font-family:'Syne Mono',monospace;font-size:8px;letter-spacing:0.2em;color:#C8A95B;text-transform:uppercase;margin-bottom:5px;}
+.step-title{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;margin-bottom:4px;color:#fff;}
+.hint{font-size:11px;color:rgba(255,255,255,0.35);margin-bottom:12px;line-height:1.5;}
+.fogg{font-family:'Syne Mono',monospace;font-size:9px;color:#C8A95B;padding:8px 10px;border-left:2px solid #C8A95B;background:rgba(200,169,91,0.04);margin-bottom:14px;}
+.hlist{display:flex;flex-direction:column;gap:5px;margin-bottom:12px;}
+.hrow{display:flex;align-items:flex-start;gap:10px;padding:9px 10px;border:1px solid rgba(255,255,255,0.06);cursor:pointer;transition:all 0.15s;user-select:none;background:#0B1A12;}
+.hrow:hover{border-color:rgba(200,169,91,0.4);}
+.hrow.sel{border-color:#C8A95B;background:rgba(200,169,91,0.07);}
+.hrow.used{opacity:0.35;cursor:default;}
+.hrow-left{display:flex;flex-direction:column;align-items:center;flex-shrink:0;width:26px;}
+.hrow-num{font-family:'Syne Mono',monospace;font-size:8px;color:#C8A95B;}
+.hrow-emoji{font-size:15px;line-height:1;margin-top:2px;}
 .hrow-body{flex:1;}
-.hrow-title{font-size:12px;font-weight:700;color:#fff;margin-bottom:2px;line-height:1.3;}
-.hrow-small{font-size:10px;color:rgba(255,255,255,0.3);line-height:1.3;}
-.hrow-tick{font-size:13px;color:#C8A95B;opacity:0;flex-shrink:0;padding-top:2px;}
+.hrow-title{font-size:11px;font-weight:700;color:#fff;margin-bottom:1px;line-height:1.3;}
+.hrow-small{font-size:10px;color:rgba(255,255,255,0.25);}
+.hrow-tick{font-size:12px;color:#C8A95B;opacity:0;flex-shrink:0;padding-top:2px;}
 .hrow.sel .hrow-tick{opacity:1;}
-.custom-row{border:1px dashed rgba(200,169,91,0.3);padding:10px 12px;margin-bottom:14px;background:#0B1A12;}
-.custom-row-label{font-family:'Syne Mono',monospace;font-size:8px;color:#C8A95B;text-transform:uppercase;letter-spacing:0.2em;margin-bottom:6px;}
-.c-inp{width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-bottom:1px solid rgba(200,169,91,0.3);color:#fff;padding:8px 10px;font-size:13px;font-family:'Syne',sans-serif;outline:none;margin-bottom:6px;}
-.c-inp:focus{border-color:#C8A95B;}
-.recipe-block{background:rgba(255,255,255,0.02);border:1px solid rgba(200,169,91,0.15);padding:14px;margin-bottom:14px;}
-.rb-title{font-family:'Syne Mono',monospace;font-size:8px;letter-spacing:0.25em;color:#C8A95B;text-transform:uppercase;margin-bottom:10px;}
-.rb-field{margin-bottom:10px;}
-.rb-label{font-family:'Syne Mono',monospace;font-size:7px;letter-spacing:0.2em;color:rgba(200,169,91,0.6);text-transform:uppercase;margin-bottom:3px;display:block;}
-.rb-pre{font-size:10px;color:rgba(255,255,255,0.3);margin-bottom:3px;}
-.rb-inp{width:100%;background:rgba(255,255,255,0.04);border:none;border-bottom:1px solid rgba(200,169,91,0.25);color:#fff;padding:7px 0;font-size:13px;font-family:'Syne',sans-serif;outline:none;}
+.hrow-done-badge{font-size:10px;flex-shrink:0;padding-top:2px;}
+.custom-box{border:1px dashed rgba(200,169,91,0.25);padding:10px;margin-bottom:12px;}
+.custom-lbl{font-family:'Syne Mono',monospace;font-size:7px;color:#C8A95B;text-transform:uppercase;letter-spacing:0.2em;margin-bottom:6px;}
+.c-inp{width:100%;background:rgba(255,255,255,0.03);border:none;border-bottom:1px solid rgba(200,169,91,0.25);color:#fff;padding:7px 0;font-size:13px;font-family:'Syne',sans-serif;outline:none;margin-bottom:6px;}
+.c-inp:focus{border-bottom-color:#C8A95B;}
+.recipe-block{background:rgba(255,255,255,0.02);border:1px solid rgba(200,169,91,0.12);padding:12px;margin-bottom:12px;}
+.rb-lbl{font-family:'Syne Mono',monospace;font-size:7px;letter-spacing:0.2em;color:#C8A95B;text-transform:uppercase;margin-bottom:8px;}
+.rb-field{margin-bottom:9px;}
+.rb-field-lbl{font-family:'Syne Mono',monospace;font-size:7px;color:rgba(200,169,91,0.5);text-transform:uppercase;display:block;margin-bottom:2px;}
+.rb-inp{width:100%;background:none;border:none;border-bottom:1px solid rgba(200,169,91,0.2);color:#fff;padding:6px 0;font-size:13px;font-family:'Syne',sans-serif;outline:none;}
 .rb-inp:focus{border-bottom-color:#C8A95B;}
-.moment-hint{font-size:11px;color:rgba(255,255,255,0.3);margin-top:4px;line-height:1.4;}
-.gbtn{width:100%;padding:13px;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;margin-bottom:7px;display:block;outline:none;background:#0B1A12 !important;color:#C8A95B !important;border:2px solid #C8A95B !important;}
-.gbtn:hover{background:rgba(200,169,91,0.08) !important;}
+.moment-hint{font-size:10px;color:rgba(255,255,255,0.25);margin-top:3px;}
+.gbtn{width:100%;padding:12px;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;margin-bottom:7px;display:block;outline:none;background:#0B1A12 !important;color:#C8A95B !important;border:2px solid #C8A95B !important;}
+.gbtn:hover{background:rgba(200,169,91,0.07) !important;}
 .gbtn-teal{background:#1D9E75 !important;color:#fff !important;border:none !important;}
-.gbtn-teal:hover{filter:brightness(1.1);}
-.gbtn-teal.done{background:rgba(29,158,117,0.12) !important;color:#5DCAA5 !important;border:1px solid rgba(29,158,117,0.3) !important;cursor:default;}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:12px;}
-.stat{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);padding:10px;text-align:center;}
-.stat-val{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:#C8A95B;}
-.stat-lbl{font-family:'Syne Mono',monospace;font-size:7px;color:rgba(255,255,255,0.25);text-transform:uppercase;margin-top:2px;}
-.days-row{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin-bottom:12px;}
-.dcard{border:1px solid rgba(255,255,255,0.07);padding:8px 4px;text-align:center;background:#0B1A12;}
-.dcard.done{border-color:#1D9E75;background:rgba(29,158,117,0.08);}
+.gbtn-teal.done{background:rgba(29,158,117,0.1) !important;color:#5DCAA5 !important;border:1px solid rgba(29,158,117,0.3) !important;cursor:default !important;}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-bottom:11px;}
+.stat{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.05);padding:9px;text-align:center;}
+.stat-val{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:#C8A95B;}
+.stat-lbl{font-family:'Syne Mono',monospace;font-size:7px;color:rgba(255,255,255,0.2);text-transform:uppercase;margin-top:1px;}
+.days-row{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;margin-bottom:11px;}
+.dcard{border:1px solid rgba(255,255,255,0.06);padding:8px 3px;text-align:center;background:#0B1A12;}
+.dcard.done{border-color:#1D9E75;background:rgba(29,158,117,0.07);}
 .dcard.today{border-color:#C8A95B;}
 .dcard.locked{opacity:0.2;}
-.d-lbl{font-family:'Syne Mono',monospace;font-size:7px;color:rgba(255,255,255,0.2);margin-bottom:3px;text-transform:uppercase;}
-.d-num{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;line-height:1;margin-bottom:3px;color:#fff;}
+.d-lbl{font-family:'Syne Mono',monospace;font-size:6px;color:rgba(255,255,255,0.2);margin-bottom:2px;text-transform:uppercase;}
+.d-num{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;line-height:1;margin-bottom:2px;color:#fff;}
 .dcard.done .d-num{color:#5DCAA5;}
 .dcard.today .d-num{color:#E8C97A;}
-.d-emoji{font-size:14px;min-height:20px;display:flex;align-items:center;justify-content:center;}
-.recipe-show{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);padding:11px;margin-bottom:12px;}
-.rs-lbl{font-family:'Syne Mono',monospace;font-size:7px;letter-spacing:0.2em;color:#C8A95B;text-transform:uppercase;margin-bottom:6px;}
+.d-emoji{font-size:13px;min-height:18px;display:flex;align-items:center;justify-content:center;}
+.recipe-show{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.05);padding:10px;margin-bottom:11px;}
+.rs-lbl{font-family:'Syne Mono',monospace;font-size:7px;color:#C8A95B;text-transform:uppercase;margin-bottom:5px;}
 .rs-txt{font-size:12px;color:rgba(255,255,255,0.5);line-height:1.9;}
 .rs-txt strong{color:#fff;}
-.lesson{border-left:2px solid #C8A95B;padding:10px 12px;margin-bottom:12px;background:rgba(255,255,255,0.02);}
-.lesson-lbl{font-family:'Syne Mono',monospace;font-size:7px;letter-spacing:0.2em;color:#C8A95B;text-transform:uppercase;margin-bottom:5px;}
-.lesson-txt{font-size:12px;color:rgba(255,255,255,0.45);line-height:1.6;}
+.lesson{border-left:2px solid #C8A95B;padding:9px 11px;margin-bottom:11px;background:rgba(255,255,255,0.02);}
+.lesson-lbl{font-family:'Syne Mono',monospace;font-size:7px;color:#C8A95B;text-transform:uppercase;margin-bottom:4px;}
+.lesson-txt{font-size:11px;color:rgba(255,255,255,0.45);line-height:1.6;}
 .lesson-txt strong{color:#fff;}
-.undo-link{background:none;border:none;color:rgba(255,255,255,0.15);font-size:10px;cursor:pointer;display:block;text-align:center;margin-bottom:10px;font-family:'Syne',sans-serif;width:100%;}
-.undo-link:hover{color:rgba(255,255,255,0.35);}
-.feel-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;}
+.undo-lnk{background:none;border:none;color:rgba(255,255,255,0.15);font-size:10px;cursor:pointer;display:block;text-align:center;margin-bottom:10px;font-family:'Syne',sans-serif;width:100%;}
+.feel-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;}
 .feel-overlay.hide{display:none;}
-.feel-box{background:#0D2218;border:1px solid #C8A95B;padding:24px 20px;max-width:320px;width:100%;text-align:center;}
-.feel-reward{font-size:52px;margin-bottom:8px;animation:popIn 0.4s ease;}
-@keyframes popIn{0%{transform:scale(0.3);opacity:0}70%{transform:scale(1.2)}100%{transform:scale(1);opacity:1}}
-.feel-title{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:#fff;margin-bottom:4px;}
-.feel-sub{font-size:11px;color:rgba(255,255,255,0.4);margin-bottom:16px;}
-.feel-q{font-family:'Syne Mono',monospace;font-size:9px;letter-spacing:0.2em;color:#C8A95B;text-transform:uppercase;margin-bottom:10px;}
-.feel-emojis{display:flex;justify-content:center;gap:8px;margin-bottom:16px;}
-.feel-emoji-btn{font-size:26px;padding:8px 10px;border:1px solid rgba(255,255,255,0.1);background:#0B1A12;cursor:pointer;transition:all 0.15s;border-radius:4px;line-height:1;}
-.feel-emoji-btn:hover{border-color:#C8A95B;background:rgba(200,169,91,0.1);}
-.feel-emoji-btn.sel{border-color:#C8A95B;background:rgba(200,169,91,0.15);}
-.feel-emoji-label{font-size:9px;color:rgba(255,255,255,0.3);display:block;margin-top:4px;font-family:'Syne Mono',monospace;}
-.comp-badge{width:80px;height:80px;border:2px solid #C8A95B;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:10px auto 10px;}
-.comp-badge-inner{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;color:#C8A95B;}
-.done-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:12px;}
-.done-card{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);padding:10px 6px;text-align:center;}
-.done-val{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:700;color:#E8C97A;}
-.done-lbl{font-family:'Syne Mono',monospace;font-size:7px;color:rgba(255,255,255,0.25);text-transform:uppercase;margin-top:2px;}
-.feel-summary{background:rgba(255,255,255,0.02);border:1px solid rgba(200,169,91,0.15);padding:12px;margin-bottom:10px;}
-.fs-lbl{font-family:'Syne Mono',monospace;font-size:7px;letter-spacing:0.2em;color:#C8A95B;text-transform:uppercase;margin-bottom:8px;}
-.fs-days{display:flex;gap:6px;flex-wrap:wrap;}
-.fs-day{text-align:center;font-size:11px;}
-.fs-day-lbl{font-family:'Syne Mono',monospace;font-size:7px;color:rgba(255,255,255,0.25);display:block;margin-top:2px;}
-.insight{background:rgba(255,255,255,0.02);border:1px solid rgba(200,169,91,0.15);padding:11px;margin-bottom:8px;}
-.ins-lbl{font-family:'Syne Mono',monospace;font-size:7px;letter-spacing:0.2em;color:#C8A95B;text-transform:uppercase;margin-bottom:5px;}
-.ins-txt{font-size:12px;color:rgba(255,255,255,0.55);line-height:1.6;}
+.feel-box{background:#0D2218;border:1px solid #C8A95B;padding:22px 18px;max-width:300px;width:100%;text-align:center;}
+.feel-reward{font-size:48px;margin-bottom:6px;animation:popIn 0.4s ease;}
+@keyframes popIn{0%{transform:scale(0.3);opacity:0}70%{transform:scale(1.15)}100%{transform:scale(1);opacity:1}}
+.feel-title{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:700;color:#fff;margin-bottom:3px;}
+.feel-sub{font-size:11px;color:rgba(255,255,255,0.35);margin-bottom:14px;}
+.feel-q{font-family:'Syne Mono',monospace;font-size:8px;color:#C8A95B;text-transform:uppercase;margin-bottom:9px;letter-spacing:0.15em;}
+.feel-emojis{display:flex;justify-content:center;gap:7px;margin-bottom:14px;}
+.feel-btn{font-size:24px;padding:7px 9px;border:1px solid rgba(255,255,255,0.1);background:#0B1A12;cursor:pointer;border-radius:4px;line-height:1;transition:all 0.15s;}
+.feel-btn:hover,.feel-btn.sel{border-color:#C8A95B;background:rgba(200,169,91,0.1);}
+.feel-lbl{font-size:8px;color:rgba(255,255,255,0.25);display:block;margin-top:3px;font-family:'Syne Mono',monospace;}
+.comp-badge{width:80px;height:80px;border:2px solid #C8A95B;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:8px auto 10px;position:relative;}
+.comp-badge::before{content:'';position:absolute;inset:-6px;border:1px solid rgba(200,169,91,0.2);border-radius:50%;}
+.comp-inner{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;color:#C8A95B;}
+.done-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-bottom:12px;}
+.done-card{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.05);padding:10px 5px;text-align:center;}
+.done-val{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:#E8C97A;}
+.done-lbl{font-family:'Syne Mono',monospace;font-size:7px;color:rgba(255,255,255,0.2);text-transform:uppercase;margin-top:2px;}
+.feel-summary{background:rgba(255,255,255,0.02);border:1px solid rgba(200,169,91,0.12);padding:11px;margin-bottom:10px;}
+.fs-lbl{font-family:'Syne Mono',monospace;font-size:7px;color:#C8A95B;text-transform:uppercase;margin-bottom:8px;letter-spacing:0.15em;}
+.fs-days{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;}
+.fs-day{text-align:center;}
+.fs-day-lbl{font-family:'Syne Mono',monospace;font-size:6px;color:rgba(255,255,255,0.2);display:block;margin-top:2px;}
+.insight{background:rgba(255,255,255,0.02);border:1px solid rgba(200,169,91,0.12);padding:10px;margin-bottom:8px;}
+.ins-lbl{font-family:'Syne Mono',monospace;font-size:7px;color:#C8A95B;text-transform:uppercase;margin-bottom:5px;}
+.ins-txt{font-size:11px;color:rgba(255,255,255,0.55);line-height:1.6;}
 .ins-txt strong{color:#fff;}
-.cta{background:rgba(200,169,91,0.07);border:1px solid rgba(200,169,91,0.2);padding:14px;text-align:center;margin-bottom:10px;}
+.cta{background:rgba(200,169,91,0.06);border:1px solid rgba(200,169,91,0.18);padding:14px;text-align:center;margin-bottom:10px;}
 .cta-t{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:700;margin-bottom:4px;color:#fff;}
-.cta-d{font-size:11px;color:rgba(255,255,255,0.4);line-height:1.5;margin-bottom:10px;}
+.cta-d{font-size:11px;color:rgba(255,255,255,0.35);line-height:1.5;margin-bottom:10px;}
 .cta-a{display:inline-block;background:#C8A95B;color:#0B1A12;font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:10px 18px;text-decoration:none;}
-canvas{width:100%;border:1px solid rgba(200,169,91,0.2);margin-bottom:8px;display:none;}
-.tagline{font-family:'Syne Mono',monospace;font-size:7px;letter-spacing:0.15em;color:rgba(255,255,255,0.08);text-align:center;margin-top:18px;text-transform:uppercase;}
+canvas{width:100%;border:1px solid rgba(200,169,91,0.2);margin-bottom:7px;display:none;}
+.tagline{font-family:'Syne Mono',monospace;font-size:7px;color:rgba(255,255,255,0.07);text-align:center;margin-top:16px;text-transform:uppercase;letter-spacing:0.12em;}
+.stack-list{display:flex;flex-direction:column;gap:5px;margin-bottom:14px;}
+.stack-item{display:flex;align-items:center;gap:10px;padding:8px 10px;border:1px solid rgba(29,158,117,0.25);background:rgba(29,158,117,0.04);}
+.si-num{font-family:'Syne Mono',monospace;font-size:8px;color:#C8A95B;width:20px;flex-shrink:0;}
+.si-emoji{font-size:14px;flex-shrink:0;}
+.si-title{font-size:11px;font-weight:700;color:#fff;flex:1;}
+.si-feels{font-size:12px;letter-spacing:2px;}
 .confetti-wrap{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999;}
 </style>
 </head>
 <body>
-
 <div class="brand"><span>12%</span> Metabolic Spark</div>
-<span class="sub">5-day tiny habit challenge</span>
-<span class="credit">Habit method adapted from <a href="https://tinyhabits.com" target="_blank">TinyHabits.com</a> · BJ Fogg · Craig Burton CISSN</span>
-
-<!-- STEP 1 -->
-<div class="step show" id="s1">
-  <div class="step-label">Step 1 of 2 — Choose</div>
-  <div class="step-title">Pick your tiny habit</div>
-  <div class="fogg-line">"Make it so small you can't say no." — BJ Fogg</div>
-  <div class="hlist" id="hlist"></div>
-  <div class="custom-row">
-    <div class="custom-row-label">Or build your own</div>
-    <input class="c-inp" id="custom-title" type="text" placeholder="My tiny habit (e.g. 1 deep breath before emails)">
-    <input class="c-inp" id="custom-anchor" type="text" placeholder="Anchor — after I… (e.g. sit down at my desk)">
-    <button class="gbtn" onclick="pickCustom()">Use my own habit →</button>
-  </div>
+<span class="sub">50-day habit stack · 10 challenges</span>
+<span class="credit">Adapted from <a href="https://tinyhabits.com" target="_blank">TinyHabits.com</a> · BJ Fogg · Craig Burton CISSN</span>
+<div class="nav">
+  <button class="nav-btn active" id="nav-stack" onclick="showNav('stack')">My Stack</button>
+  <button class="nav-btn" id="nav-today" onclick="showNav('today')">Today</button>
+  <button class="nav-btn" id="nav-journey" onclick="showNav('journey')">Journey</button>
 </div>
-
-<!-- STEP 2 -->
-<div class="step" id="s2">
-  <div class="step-label">Step 2 of 2 — Your recipe</div>
-  <div class="step-title" id="s2-title"></div>
-  <div class="step-hint" id="s2-why"></div>
-  <div class="recipe-block">
-    <div class="rb-title">The Tiny Habits recipe</div>
-    <div class="rb-field">
-      <span class="rb-label">Anchor — after I</span>
-      <input class="rb-inp" id="inp-a" type="text" placeholder="an everyday action you already do">
-    </div>
-    <div class="rb-field">
-      <span class="rb-label">Tiny behaviour — I will</span>
-      <input class="rb-inp" id="inp-b" type="text" placeholder="the tiny habit — so small you can't say no">
-    </div>
-    <div class="rb-field">
-      <span class="rb-label">My moment — then I will notice</span>
-      <input class="rb-inp" id="inp-c" type="text" placeholder="e.g. how my body feels, what changes">
-      <div class="moment-hint">This becomes your daily check-in prompt. How does it actually feel?</div>
+<div class="screen show" id="screen-stack">
+  <div style="font-family:'Syne Mono',monospace;font-size:8px;color:#C8A95B;text-transform:uppercase;letter-spacing:0.2em;margin-bottom:6px;">50-Day Habit Stack</div>
+  <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progress-fill" style="width:0%"></div></div>
+  <div class="progress-label" id="progress-label"></div>
+  <div class="big-stats" style="margin-top:10px;">
+    <div class="bs"><div class="bs-val" id="bs-days">0</div><div class="bs-lbl">Days done</div></div>
+    <div class="bs"><div class="bs-val" id="bs-challenges">0</div><div class="bs-lbl">Challenges</div></div>
+    <div class="bs"><div class="bs-val" id="bs-streak">0</div><div class="bs-lbl">Streak</div></div>
+  </div>
+  <div class="stack-grid" id="stack-grid"></div>
+</div>
+<div class="screen" id="screen-today">
+  <div class="step show" id="t-s1">
+    <div class="step-label" id="t-s1-label">Challenge 1 of 10</div>
+    <div class="step-title">Pick your tiny habit</div>
+    <div class="fogg">"Make it so small you can't say no." — BJ Fogg</div>
+    <div class="hlist" id="hlist"></div>
+    <div class="custom-box">
+      <div class="custom-lbl">Or build your own</div>
+      <input class="c-inp" id="custom-title" type="text" placeholder="My tiny habit">
+      <input class="c-inp" id="custom-anchor" type="text" placeholder="Anchor — after I…">
+      <button class="gbtn" onclick="pickCustom()">Use my own →</button>
     </div>
   </div>
-  <button class="gbtn" onclick="startChallenge()">Start my 5 days →</button>
-  <button class="gbtn" onclick="go(1)">← Change my habit</button>
+  <div class="step" id="t-s2">
+    <div class="step-label" id="t-s2-label">Build your recipe</div>
+    <div class="step-title" id="t-s2-title"></div>
+    <div class="hint" id="t-s2-why"></div>
+    <div class="recipe-block">
+      <div class="rb-lbl">The Tiny Habits recipe</div>
+      <div class="rb-field"><span class="rb-field-lbl">Anchor — after I</span><input class="rb-inp" id="inp-a" type="text"></div>
+      <div class="rb-field"><span class="rb-field-lbl">Tiny behaviour — I will</span><input class="rb-inp" id="inp-b" type="text"></div>
+      <div class="rb-field"><span class="rb-field-lbl">My moment — I will notice</span><input class="rb-inp" id="inp-c" type="text"><div class="moment-hint">Your daily check-in prompt.</div></div>
+    </div>
+    <button class="gbtn" onclick="startChallenge()">Start 5 days →</button>
+    <button class="gbtn" onclick="goStep(1)">← Change habit</button>
+  </div>
+  <div class="step" id="t-s3">
+    <div class="step-label" id="t-s3-label"></div>
+    <div id="t-name" style="font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;color:#fff;margin-bottom:2px;"></div>
+    <div id="t-num" style="font-family:'Syne Mono',monospace;font-size:8px;color:#C8A95B;margin-bottom:10px;letter-spacing:0.1em;"></div>
+    <div class="stats">
+      <div class="stat"><div class="stat-val" id="st-streak">0</div><div class="stat-lbl">Streak</div></div>
+      <div class="stat"><div class="stat-val" id="st-done">0</div><div class="stat-lbl">Done of 5</div></div>
+      <div class="stat"><div class="stat-val" id="st-pct">0%</div><div class="stat-lbl">Complete</div></div>
+    </div>
+    <div class="days-row" id="days-row"></div>
+    <div class="recipe-show"><div class="rs-lbl">Your recipe</div><div class="rs-txt" id="rs-txt"></div></div>
+    <button class="gbtn-teal gbtn" id="today-btn" onclick="markToday()"></button>
+    <button class="undo-lnk" id="undo-btn" onclick="undoToday()" style="display:none">undo today's check-in</button>
+    <div class="lesson" id="lesson"></div>
+  </div>
+  <div class="step" id="t-s4">
+    <div style="text-align:center;padding:8px 0 12px;">
+      <div class="comp-badge"><div class="comp-inner">12%</div></div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:#fff;margin-bottom:3px;">Challenge complete!</div>
+      <div style="font-family:'Syne Mono',monospace;font-size:8px;letter-spacing:0.2em;color:#C8A95B;text-transform:uppercase;margin-bottom:6px;" id="comp-challenge-label"></div>
+      <div style="font-size:28px;" id="comp-trophy"></div>
+    </div>
+    <div class="done-grid">
+      <div class="done-card"><div class="done-val" id="comp-num">1</div><div class="done-lbl">Challenge</div></div>
+      <div class="done-card"><div class="done-val">5</div><div class="done-lbl">Days</div></div>
+      <div class="done-card"><div class="done-val" id="comp-total-days">5</div><div class="done-lbl">Total days</div></div>
+    </div>
+    <div class="feel-summary"><div class="fs-lbl">How it felt</div><div class="fs-days" id="comp-feels"></div></div>
+    <div class="insight"><div class="ins-lbl">Your recipe</div><div class="ins-txt" id="comp-recipe"></div></div>
+    <div class="insight"><div class="ins-lbl">What you built</div><div class="ins-txt" id="comp-why"></div></div>
+    <canvas id="badge-canvas"></canvas>
+    <button class="gbtn" onclick="genBadge()">Generate badge →</button>
+    <button class="gbtn" id="dl-btn" style="display:none;" onclick="dlBadge()">Download badge →</button>
+    <div id="next-challenge-block"></div>
+    <div class="cta">
+      <div class="cta-t">Ready for 30 days?</div>
+      <div class="cta-d">The 30-Day Metabolic Reset runs across all five metabolic markers with blood sugar data, Hunger Training, and a community doing it with you.</div>
+      <a class="cta-a" href="https://join12percent.com" target="_blank">Join the 30-Day Reset →</a>
+    </div>
+    <div class="tagline">Adapted from TinyHabits.com · This is how the 12% operate</div>
+  </div>
 </div>
-
-<!-- STEP 3 TRACKER -->
-<div class="step" id="s3">
-  <div class="step-label">Daily check-in</div>
-  <div id="t-name" style="font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;color:#fff;margin-bottom:2px;"></div>
-  <div id="t-num" style="font-family:'Syne Mono',monospace;font-size:8px;color:#C8A95B;margin-bottom:12px;letter-spacing:0.1em;"></div>
-  <div class="stats">
-    <div class="stat"><div class="stat-val" id="st-streak">0</div><div class="stat-lbl">Streak</div></div>
-    <div class="stat"><div class="stat-val" id="st-done">0</div><div class="stat-lbl">Done of 5</div></div>
-    <div class="stat"><div class="stat-val" id="st-pct">0%</div><div class="stat-lbl">Complete</div></div>
-  </div>
-  <div class="days-row" id="days-row"></div>
-  <div class="recipe-show">
-    <div class="rs-lbl">Your recipe</div>
-    <div class="rs-txt" id="rs-txt"></div>
-  </div>
-  <button class="gbtn-teal gbtn" id="today-btn" onclick="markToday()">Mark Day 1 as done →</button>
-  <button class="undo-link" id="undo-btn" onclick="undoToday()" style="display:none">undo today's check-in</button>
-  <div class="lesson" id="lesson"></div>
-  <button class="gbtn" onclick="if(confirm('Reset and start fresh?')){resetAll()}" style="margin-top:4px;">Start over</button>
-  <div class="tagline">Adapted from TinyHabits.com · This is how the 12% operate</div>
+<div class="screen" id="screen-journey">
+  <div style="font-family:'Syne Mono',monospace;font-size:8px;color:#C8A95B;text-transform:uppercase;letter-spacing:0.2em;margin-bottom:12px;">Your habit stack</div>
+  <div class="stack-list" id="journey-list"></div>
+  <div class="tagline" style="margin-top:10px;">Every habit you complete lives here forever</div>
 </div>
-
-<!-- STEP 4 COMPLETE -->
-<div class="step" id="s4">
-  <div style="text-align:center;padding:10px 0 14px;">
-    <div class="comp-badge"><div class="comp-badge-inner">12%</div></div>
-    <div style="font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:700;color:#fff;margin-bottom:3px;">You made it.</div>
-    <div style="font-family:'Syne Mono',monospace;font-size:8px;letter-spacing:0.25em;color:#C8A95B;text-transform:uppercase;margin-bottom:14px;">5-Day Tiny Habit Challenge · Complete</div>
-  </div>
-  <div class="done-grid">
-    <div class="done-card"><div class="done-val">1</div><div class="done-lbl">Habit</div></div>
-    <div class="done-card"><div class="done-val">5</div><div class="done-lbl">Days</div></div>
-    <div class="done-card"><div class="done-val">12%</div><div class="done-lbl">Closer</div></div>
-  </div>
-  <div class="feel-summary">
-    <div class="fs-lbl">How it felt — your 5 days</div>
-    <div class="fs-days" id="feel-summary"></div>
-  </div>
-  <div class="insight"><div class="ins-lbl">Your recipe</div><div class="ins-txt" id="d-recipe"></div></div>
-  <div class="insight"><div class="ins-lbl">What just happened</div><div class="ins-txt" id="d-why"></div></div>
-  <canvas id="badge-canvas"></canvas>
-  <button class="gbtn" onclick="genBadge()">Generate completion badge →</button>
-  <button class="gbtn" id="dl-btn" style="display:none;" onclick="dlBadge()">Download badge →</button>
-  <div class="cta">
-    <div class="cta-t">Ready for 30 days?</div>
-    <div class="cta-d">The 30-Day Metabolic Reset runs across all five metabolic markers — blood sugar data, Hunger Training, and a community doing it with you.</div>
-    <a class="cta-a" href="https://join12percent.com" target="_blank">Join the 30-Day Reset →</a>
-  </div>
-  <button class="gbtn" onclick="resetAll()">Start a new challenge</button>
-  <div class="tagline">Adapted from TinyHabits.com · This is how the 12% operate</div>
-</div>
-
-<!-- FEEL CHECK POPUP -->
 <div class="feel-overlay hide" id="feel-overlay">
   <div class="feel-box">
     <div class="feel-reward" id="feel-reward">⭐</div>
-    <div class="feel-title" id="feel-day-title">Day 1 done!</div>
-    <div class="feel-sub" id="feel-moment-prompt"></div>
+    <div class="feel-title" id="feel-title"></div>
+    <div class="feel-sub" id="feel-sub"></div>
     <div class="feel-q">How did it feel?</div>
     <div class="feel-emojis">
-      <div style="text-align:center;"><button class="feel-emoji-btn" onclick="selectFeel('💪',this)">💪<span class="feel-emoji-label">Strong</span></button></div>
-      <div style="text-align:center;"><button class="feel-emoji-btn" onclick="selectFeel('😌',this)">😌<span class="feel-emoji-label">Calm</span></button></div>
-      <div style="text-align:center;"><button class="feel-emoji-btn" onclick="selectFeel('😊',this)">😊<span class="feel-emoji-label">Good</span></button></div>
-      <div style="text-align:center;"><button class="feel-emoji-btn" onclick="selectFeel('🤷',this)">🤷<span class="feel-emoji-label">Meh</span></button></div>
+      <div style="text-align:center;"><button class="feel-btn" onclick="selectFeel('💪',this)">💪<span class="feel-lbl">Strong</span></button></div>
+      <div style="text-align:center;"><button class="feel-btn" onclick="selectFeel('😌',this)">😌<span class="feel-lbl">Calm</span></button></div>
+      <div style="text-align:center;"><button class="feel-btn" onclick="selectFeel('😊',this)">😊<span class="feel-lbl">Good</span></button></div>
+      <div style="text-align:center;"><button class="feel-btn" onclick="selectFeel('🤷',this)">🤷<span class="feel-lbl">Meh</span></button></div>
     </div>
     <button class="gbtn" onclick="closeFeel()">Continue →</button>
   </div>
 </div>
-
+<div class="feel-overlay hide" id="fifty-overlay">
+  <div class="feel-box" style="max-width:340px;">
+    <div style="text-align:center;padding:10px 0;">
+      <div style="font-size:56px;animation:popIn 0.6s ease;">🏆</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:700;color:#E8C97A;margin:8px 0 4px;">50 Days.</div>
+      <div style="font-family:'Syne Mono',monospace;font-size:8px;color:#C8A95B;letter-spacing:0.3em;text-transform:uppercase;margin-bottom:14px;">10 Habits · Stack Complete</div>
+    </div>
+    <div style="font-size:12px;color:rgba(255,255,255,0.5);line-height:1.6;margin-bottom:14px;text-align:center;">You just built 10 tiny habits in 50 days. That's not willpower — that's identity. You are metabolically different to the person who started Day 1.</div>
+    <button class="gbtn" onclick="document.getElementById('fifty-overlay').classList.add('hide');showNav('journey');">See my full stack →</button>
+  </div>
+</div>
 <div class="confetti-wrap" id="confetti"></div>
-
 <script>
 const HABITS=[
   {id:1,t:'1 Squat After the Bathroom',emoji:'🦵',anchor:'finish using the bathroom',b:'do 1 squat',why:'Movement anchored to an existing trigger builds muscle memory fast. One squat becomes two, then five — automatically.'},
-  {id:2,t:'1 Push-Up Before the Shower',emoji:'💪',anchor:'turn on the shower',b:'do 1 push-up',why:'Upper body activation before your day starts. So small it feels silly — which means you\'ll always do it.'},
-  {id:3,t:'1 Box Breath Before Your Phone',emoji:'🫁',anchor:'reach for my phone in the morning',b:'take 1 box breath (4 counts in, hold 4, out 4, hold 4)',why:'Breaks the cortisol spike of immediate screen exposure. One breath resets your nervous system before the noise begins.'},
-  {id:4,t:'1 Glass of Water on Waking',emoji:'💧',anchor:'turn off my alarm',b:'drink 1 full glass of water',why:'Rehydrates after 7–8 hours of no fluid. Reduces false hunger signals and supports insulin sensitivity from the first hour.'},
+  {id:2,t:'1 Push-Up Before the Shower',emoji:'💪',anchor:'turn on the shower',b:'do 1 push-up',why:'Upper body activation before your day. So small it feels silly — which means you\'ll always do it.'},
+  {id:3,t:'1 Box Breath Before Your Phone',emoji:'🫁',anchor:'reach for my phone in the morning',b:'take 1 box breath (4 in, hold 4, out 4, hold 4)',why:'Breaks the cortisol spike of immediate screen exposure. One breath resets your nervous system before the noise begins.'},
+  {id:4,t:'1 Glass of Water on Waking',emoji:'💧',anchor:'turn off my alarm',b:'drink 1 full glass of water',why:'Rehydrates after 7-8 hours of no fluid. Reduces false hunger signals and supports insulin sensitivity from the first hour.'},
   {id:5,t:'30-Second Stretch at the Kettle',emoji:'🧘',anchor:'switch the kettle on',b:'do a 30-second stretch while I wait',why:'Sedentary time accumulates fast. A daily stretch anchored to the kettle becomes automatic within days.'},
   {id:6,t:'2-Minute Walk After Meals',emoji:'🚶',anchor:'put my fork down after eating',b:'walk for 2 minutes',why:'Muscles absorb glucose without insulin after meals. Even 2 minutes cuts the post-meal glucose spike measurably.'},
   {id:7,t:'1 Minute of Morning Sunlight',emoji:'☀️',anchor:'step outside in the morning',b:'stand in the sunlight for 1 minute',why:'Morning light sets your circadian rhythm, improves sleep quality, and helps regulate cortisol throughout the day.'},
@@ -238,168 +272,249 @@ const HABITS=[
   {id:10,t:'Phone Down 5 Minutes Earlier',emoji:'📵',anchor:'notice I\'m scrolling before bed',b:'put my phone down and don\'t pick it up again',why:'Reducing evening screen time lowers cortisol and blue light exposure, improving sleep onset and overnight glucose.'}
 ];
 const LESSONS=[
-  {l:'Day 1 — Do it once',t:'<strong>One repetition. That\'s the whole job today.</strong> The anchor fires, you do the tiny behaviour, you notice how it feels. So small you can\'t say no — that\'s the whole point.'},
-  {l:'Day 2 — Why it works',t:'<strong>Today you understand the mechanism.</strong> Your tiny habit targets a specific signal in your biology. When you feel like skipping, you\'re not skipping a habit — you\'re skipping the signal.'},
-  {l:'Day 3 — The wobble',t:'<strong>Day 3 is where most people quietly stop.</strong> Life gets in the way. That\'s not failure — that\'s data. Troubleshoot the anchor: was it clear? Was the behaviour truly tiny? Adjust one thing.'},
-  {l:'Day 4 — Identity',t:'<strong>Four repetitions in. Something has shifted.</strong> You\'re not just doing a habit — you\'re becoming someone who does it. Say it: "I\'m the kind of person who does this every day."'},
-  {l:'Day 5 — Graduate',t:'<strong>Five days. One tiny habit. Done.</strong> BJ Fogg says tiny habits grow naturally once they\'re wired in. You\'ve done the wiring. Now watch it grow.'}
+  {l:'Day 1 — Do it once',t:'<strong>One repetition. That\'s the whole job today.</strong> The anchor fires, you do the tiny behaviour, you notice how it feels. So small you can\'t say no.'},
+  {l:'Day 2 — Why it works',t:'<strong>Today you understand the mechanism.</strong> Your tiny habit targets a specific signal in your biology. When you feel like skipping — you\'re not skipping a habit, you\'re skipping the signal.'},
+  {l:'Day 3 — The wobble',t:'<strong>Day 3 is where most people quietly stop.</strong> That\'s not failure — that\'s data. Troubleshoot: was the anchor clear? Was the behaviour truly tiny? Adjust one thing and go again.'},
+  {l:'Day 4 — Identity',t:'<strong>Four repetitions in. Something has shifted.</strong> Say it out loud: "I\'m the kind of person who does this every day."'},
+  {l:'Day 5 — Graduate',t:'<strong>Five days. One tiny habit. Done.</strong> BJ Fogg says tiny habits grow naturally once they\'re wired in. You\'ve done the wiring. Now stack the next one.'}
 ];
 const DAY_REWARDS=['⭐','🔥','🔥🔥','🏅','🏆'];
+const CHALLENGE_TROPHIES=['⭐','🥉','🥈','🥇','💎','🔥','⚡','🌟','👑','🏆'];
 let S={},pendingFeel=null;
-const LS='12pct_th2';
+const LS='12pct_stack2';
 function load(){try{S=JSON.parse(localStorage.getItem(LS)||'{}')}catch(e){S={};}}
 function save(){localStorage.setItem(LS,JSON.stringify(S));}
-function go(n){document.querySelectorAll('.step').forEach(s=>s.classList.remove('show'));document.getElementById('s'+n).classList.add('show');window.scrollTo(0,0);}
+function ci(){return S.challenges?S.challenges.length:0;}
+function currentChallenge(){return S.challenges&&S.challenges.length>0?S.challenges[S.challenges.length-1]:null;}
+function hasActiveChallenge(){const c=currentChallenge();return c&&!c.complete;}
+function totalDaysDone(){return(S.challenges||[]).reduce((a,c)=>a+Object.values(c.days||{}).filter(Boolean).length,0);}
+function showNav(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('show'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('screen-'+id).classList.add('show');
+  document.getElementById('nav-'+id).classList.add('active');
+  if(id==='stack')renderStack();
+  if(id==='today')renderToday();
+  if(id==='journey')renderJourney();
+}
+function renderStack(){
+  const total=totalDaysDone(),completed=(S.challenges||[]).filter(c=>c.complete).length;
+  const pct=Math.round(total/50*100);
+  document.getElementById('progress-fill').style.width=Math.min(pct,100)+'%';
+  document.getElementById('progress-label').textContent=total+' of 50 days complete · '+completed+' of 10 challenges';
+  document.getElementById('bs-days').textContent=total;
+  document.getElementById('bs-challenges').textContent=completed;
+  document.getElementById('bs-streak').textContent=calcGlobalStreak();
+  const grid=document.getElementById('stack-grid');
+  grid.innerHTML='';
+  for(let i=0;i<10;i++){
+    const challenge=(S.challenges||[])[i];
+    const isActive=hasActiveChallenge()&&i===ci()-1;
+    const isComplete=challenge&&challenge.complete;
+    const isNext=!isActive&&!isComplete&&i===ci();
+    const isLocked=!isActive&&!isComplete&&i>ci();
+    let cls='stack-card';
+    if(isComplete)cls+=' complete';
+    else if(isActive)cls+=' active-challenge';
+    else if(isLocked)cls+=' locked';
+    const habit=challenge?HABITS.find(h=>h.id===challenge.hid)||(challenge.custom?{t:challenge.customTitle,emoji:'✨'}:HABITS[0]):null;
+    const daysArr=challenge?Object.values(challenge.days||{}).filter(Boolean).length:0;
+    const dots=Array.from({length:5},(_,d)=>`<div class="sc-day-dot${challenge&&challenge.days&&challenge.days['d'+(d+1)]?' done':''}"></div>`).join('');
+    const onclick=isActive?`showNav('today')`:isNext?`showNav('today')`:isComplete?`showNav('journey')`:``;
+    grid.innerHTML+=`<div class="${cls}" onclick="${onclick}">
+      <div class="sc-num">${String(i+1).padStart(2,'0')}</div>
+      <div class="sc-emoji">${habit?habit.emoji:(isNext?'➕':'🔒')}</div>
+      <div class="sc-title">${habit?habit.t:(isNext?'Start challenge '+(i+1):'Locked')}</div>
+      <div class="sc-status ${isComplete?'done':isActive?'active':''}">${isComplete?'Complete ✓':isActive?'In progress · Day '+daysArr+'/5':isNext?'Tap to start':'Locked'}</div>
+      ${challenge?`<div class="sc-days">${dots}</div>`:''}
+      ${isComplete?`<div class="sc-badge">${CHALLENGE_TROPHIES[i]}</div>`:''}
+    </div>`;
+  }
+}
+function calcGlobalStreak(){
+  const c=currentChallenge();if(!c)return 0;
+  const di=dayIdx(c);let s=0;
+  for(let i=di;i>=0;i--){if(c.days&&c.days['d'+(i+1)])s++;else break;}
+  return s;
+}
+function renderToday(){
+  if(!hasActiveChallenge()&&ci()<10){goStep(1);renderHabits();document.getElementById('t-s1-label').textContent='Challenge '+(ci()+1)+' of 10';}
+  else if(hasActiveChallenge()){goStep(3);renderTracker();}
+}
+function goStep(n){document.querySelectorAll('#screen-today .step').forEach(s=>s.classList.remove('show'));document.getElementById('t-s'+n).classList.add('show');window.scrollTo(0,0);}
 function renderHabits(){
-  document.getElementById('hlist').innerHTML=HABITS.map(h=>`
-    <div class="hrow${S.hid===h.id?' sel':''}" onclick="pickH(${h.id})">
+  const usedIds=(S.challenges||[]).filter(c=>c.complete).map(c=>c.hid);
+  document.getElementById('hlist').innerHTML=HABITS.map(h=>{
+    const used=usedIds.includes(h.id);
+    return `<div class="hrow${S.pendingHid===h.id?' sel':''}${used?' used':''}" onclick="${used?'':'pickH('+h.id+')'}">
       <div class="hrow-left"><span class="hrow-num">${String(h.id).padStart(2,'0')}</span><span class="hrow-emoji">${h.emoji}</span></div>
       <div class="hrow-body"><div class="hrow-title">${h.t}</div><div class="hrow-small">After I ${h.anchor}</div></div>
-      <span class="hrow-tick">✓</span>
-    </div>`).join('');
+      ${used?`<span class="hrow-done-badge">✓</span>`:`<span class="hrow-tick">✓</span>`}
+    </div>`;
+  }).join('');
 }
 function pickH(id){
-  S.hid=id;S.custom=false;save();renderHabits();
+  S.pendingHid=id;save();renderHabits();
   const h=HABITS.find(x=>x.id===id);
-  document.getElementById('s2-title').textContent=h.t;
-  document.getElementById('s2-why').textContent=h.why;
-  document.getElementById('inp-a').value=S.anchor||h.anchor;
-  document.getElementById('inp-b').value=S.behaviour||h.b;
-  document.getElementById('inp-c').value=S.moment||'how my body feels doing this each day';
-  setTimeout(()=>go(2),120);
+  document.getElementById('t-s2-label').textContent='Challenge '+(ci()+1)+' — Build recipe';
+  document.getElementById('t-s2-title').textContent=h.t;
+  document.getElementById('t-s2-why').textContent=h.why;
+  document.getElementById('inp-a').value=h.anchor;
+  document.getElementById('inp-b').value=h.b;
+  document.getElementById('inp-c').value='how my body feels doing this each day';
+  setTimeout(()=>goStep(2),100);
 }
 function pickCustom(){
   const t=document.getElementById('custom-title').value.trim();
   const a=document.getElementById('custom-anchor').value.trim();
-  if(!t||!a){alert('Please enter your habit and anchor.');return;}
-  S.hid=99;S.custom=true;S.customTitle=t;S.customAnchor=a;save();
-  document.getElementById('s2-title').textContent=t;
-  document.getElementById('s2-why').textContent='Your own tiny habit — anchored to something you already do every day.';
+  if(!t||!a){alert('Please fill in both fields.');return;}
+  S.pendingHid=99;S.pendingCustomTitle=t;S.pendingCustomAnchor=a;save();
+  document.getElementById('t-s2-label').textContent='Challenge '+(ci()+1)+' — Build recipe';
+  document.getElementById('t-s2-title').textContent=t;
+  document.getElementById('t-s2-why').textContent='Your own tiny habit — anchored to something you already do every day.';
   document.getElementById('inp-a').value=a;
   document.getElementById('inp-b').value=t;
   document.getElementById('inp-c').value='how my body feels doing this each day';
-  go(2);
+  goStep(2);
 }
 function startChallenge(){
   const a=document.getElementById('inp-a').value.trim();
   const b=document.getElementById('inp-b').value.trim();
   const c=document.getElementById('inp-c').value.trim();
   if(!a||!b||!c){alert('Please fill in all three fields.');return;}
-  S.anchor=a;S.behaviour=b;S.moment=c;
-  if(!S.startDate)S.startDate=new Date().toDateString();
-  if(!S.days)S.days={};
-  if(!S.feels)S.feels={};
-  save();renderTracker();go(3);
+  const isCustom=S.pendingHid===99;
+  const newC={hid:S.pendingHid,custom:isCustom,customTitle:isCustom?S.pendingCustomTitle:'',anchor:a,behaviour:b,moment:c,startDate:new Date().toDateString(),days:{},feels:{},complete:false,num:ci()+1};
+  if(!S.challenges)S.challenges=[];
+  S.challenges.push(newC);
+  delete S.pendingHid;delete S.pendingCustomTitle;delete S.pendingCustomAnchor;
+  save();renderTracker();goStep(3);
 }
-function di(){if(!S.startDate)return 0;return Math.min(Math.floor((new Date()-new Date(S.startDate))/86400000),4);}
-function dc(){return Object.values(S.days||{}).filter(Boolean).length;}
-function streak(){let s=0,d=di();for(let i=d;i>=0;i--){if(S.days&&S.days['d'+(i+1)])s++;else break;}return s;}
-function getHabit(){return S.custom?{t:S.customTitle,emoji:'✨',why:'Your own tiny habit.'}:(HABITS.find(x=>x.id===S.hid)||HABITS[0]);}
+function getChallenge(){return currentChallenge();}
+function getChallengeHabit(c){return c.custom?{t:c.customTitle,emoji:'✨',why:'Your own tiny habit.'}:(HABITS.find(h=>h.id===c.hid)||HABITS[0]);}
+function dayIdx(c){if(!c||!c.startDate)return 0;return Math.min(Math.floor((new Date()-new Date(c.startDate))/86400000),4);}
+function doneCount(c){return Object.values(c.days||{}).filter(Boolean).length;}
 function renderTracker(){
-  const h=getHabit();
+  const c=getChallenge();if(!c)return;
+  const h=getChallengeHabit(c);
+  const di=dayIdx(c),done=doneCount(c);
+  document.getElementById('t-s3-label').textContent='Challenge '+c.num+' of 10 · Day '+(di+1)+' of 5';
   document.getElementById('t-name').textContent=h.emoji+' '+h.t;
-  document.getElementById('t-num').textContent='Tiny Habit · Day '+(di()+1)+' of 5';
-  const done=dc(),day=di();
-  document.getElementById('st-streak').textContent=streak();
+  document.getElementById('t-num').textContent='Tiny Habit · Day '+(di+1)+' of 5';
+  let streak=0;for(let i=di;i>=0;i--){if(c.days&&c.days['d'+(i+1)])streak++;else break;}
+  document.getElementById('st-streak').textContent=streak;
   document.getElementById('st-done').textContent=done;
   document.getElementById('st-pct').textContent=Math.round(done/5*100)+'%';
   document.getElementById('days-row').innerHTML=Array.from({length:5},(_,i)=>{
-    const d=!!(S.days&&S.days['d'+(i+1)]);
-    const feel=S.feels&&S.feels['d'+(i+1)]||'';
-    const cls=d?'done':i===day?'today':i>day?'locked':'';
+    const d=!!(c.days&&c.days['d'+(i+1)]);
+    const feel=c.feels&&c.feels['d'+(i+1)]||'';
+    const cls=d?'done':i===di?'today':i>di?'locked':'';
     return `<div class="dcard ${cls}"><div class="d-lbl">Day ${i+1}</div><div class="d-num">${i+1}</div><div class="d-emoji">${d?(feel||DAY_REWARDS[i]):''}</div></div>`;
   }).join('');
-  document.getElementById('rs-txt').innerHTML=`After I <strong>${S.anchor}</strong><br>I will <strong>${S.behaviour}</strong><br>I will notice <strong>${S.moment}</strong>`;
-  const key='d'+(day+1),todayDone=!!(S.days&&S.days[key]);
+  document.getElementById('rs-txt').innerHTML=`After I <strong>${c.anchor}</strong><br>I will <strong>${c.behaviour}</strong><br>I will notice <strong>${c.moment}</strong>`;
+  const key='d'+(di+1),todayDone=!!(c.days&&c.days[key]);
   const btn=document.getElementById('today-btn'),ub=document.getElementById('undo-btn');
-  btn.textContent=todayDone?'✓ Day '+(day+1)+' complete':'Mark Day '+(day+1)+' as done →';
-  if(todayDone){btn.style.cssText='width:100%;padding:13px;font-family:Syne,sans-serif;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;cursor:default;margin-bottom:7px;display:block;background:rgba(29,158,117,0.12)!important;color:#5DCAA5!important;border:1px solid rgba(29,158,117,0.3)!important;outline:none;';}
-  else{btn.style.cssText='width:100%;padding:13px;font-family:Syne,sans-serif;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;margin-bottom:7px;display:block;background:#1D9E75!important;color:#fff!important;border:none!important;outline:none;';}
+  btn.textContent=todayDone?'✓ Day '+(di+1)+' complete':'Mark Day '+(di+1)+' as done →';
+  if(todayDone){btn.style.cssText='width:100%;padding:12px;font-family:Syne,sans-serif;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;cursor:default;margin-bottom:7px;display:block;background:rgba(29,158,117,0.1)!important;color:#5DCAA5!important;border:1px solid rgba(29,158,117,0.3)!important;outline:none;';}
+  else{btn.style.cssText='width:100%;padding:12px;font-family:Syne,sans-serif;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;margin-bottom:7px;display:block;background:#1D9E75!important;color:#fff!important;border:none!important;outline:none;';}
   ub.style.display=todayDone?'block':'none';
-  const l=LESSONS[day];
+  const l=LESSONS[di];
   document.getElementById('lesson').innerHTML=`<div class="lesson-lbl">${l.l}</div><div class="lesson-txt">${l.t}</div>`;
 }
 function markToday(){
-  const day=di(),key='d'+(day+1);
-  if(S.days&&S.days[key])return;
-  if(!S.days)S.days={};
-  S.days[key]=true;save();
-  pendingFeel=key;
-  showFeelPopup(day);
-}
-function showFeelPopup(dayIdx){
-  const h=getHabit();
-  document.getElementById('feel-reward').textContent=DAY_REWARDS[dayIdx];
-  document.getElementById('feel-day-title').textContent='Day '+(dayIdx+1)+' done! '+h.emoji;
-  document.getElementById('feel-moment-prompt').textContent=S.moment||'How did it feel?';
-  document.querySelectorAll('.feel-emoji-btn').forEach(b=>b.classList.remove('sel'));
+  const c=getChallenge();if(!c)return;
+  const di=dayIdx(c),key='d'+(di+1);
+  if(c.days&&c.days[key])return;
+  if(!c.days)c.days={};
+  c.days[key]=true;save();pendingFeel=key;
+  document.getElementById('feel-reward').textContent=DAY_REWARDS[di];
+  document.getElementById('feel-title').textContent='Day '+(di+1)+' done! '+getChallengeHabit(c).emoji;
+  document.getElementById('feel-sub').textContent=c.moment||'How did it feel?';
+  document.querySelectorAll('.feel-btn').forEach(b=>b.classList.remove('sel'));
   document.getElementById('feel-overlay').classList.remove('hide');
   confetti();
 }
 function selectFeel(emoji,btn){
-  document.querySelectorAll('.feel-emoji-btn').forEach(b=>b.classList.remove('sel'));
+  document.querySelectorAll('.feel-btn').forEach(b=>b.classList.remove('sel'));
   btn.classList.add('sel');
-  if(!S.feels)S.feels={};
-  S.feels[pendingFeel]=emoji;
-  save();
+  const c=getChallenge();if(!c)return;
+  if(!c.feels)c.feels={};
+  c.feels[pendingFeel]=emoji;save();
 }
 function closeFeel(){
   document.getElementById('feel-overlay').classList.add('hide');
-  renderTracker();
-  if(dc()===5)setTimeout(()=>{showDone();go(4);},400);
+  const c=getChallenge();if(!c)return;
+  if(doneCount(c)===5){
+    c.complete=true;c.completedDate=new Date().toDateString();save();
+    showChallengeComplete(c);goStep(4);
+    if(totalDaysDone()===50)setTimeout(()=>{document.getElementById('fifty-overlay').classList.remove('hide');confetti();setTimeout(confetti,800);},1200);
+  } else {renderTracker();}
 }
 function undoToday(){
-  const key='d'+(di()+1);
-  if(S.days)delete S.days[key];
-  if(S.feels)delete S.feels[key];
+  const c=getChallenge();if(!c)return;
+  const key='d'+(dayIdx(c)+1);
+  if(c.days)delete c.days[key];if(c.feels)delete c.feels[key];
   save();renderTracker();
 }
-function showDone(){
-  const h=getHabit();
-  document.getElementById('d-recipe').innerHTML=`After I <strong>${S.anchor}</strong> — I will <strong>${S.behaviour}</strong> — I will notice <strong>${S.moment}</strong>`;
-  document.getElementById('d-why').textContent=h.why+' You just spent 5 days wiring this in. Tiny habits grow naturally from here.';
-  document.getElementById('feel-summary').innerHTML=Array.from({length:5},(_,i)=>{
-    const feel=S.feels&&S.feels['d'+(i+1)]||'⭐';
+function showChallengeComplete(c){
+  const h=getChallengeHabit(c),num=c.num;
+  document.getElementById('comp-challenge-label').textContent='Challenge '+num+' of 10 · Complete';
+  document.getElementById('comp-trophy').textContent=CHALLENGE_TROPHIES[num-1];
+  document.getElementById('comp-num').textContent=num;
+  document.getElementById('comp-total-days').textContent=totalDaysDone();
+  document.getElementById('comp-feels').innerHTML=Array.from({length:5},(_,i)=>{
+    const feel=c.feels&&c.feels['d'+(i+1)]||'⭐';
     return `<div class="fs-day"><span style="font-size:22px;">${feel}</span><span class="fs-day-lbl">Day ${i+1}</span></div>`;
   }).join('');
+  document.getElementById('comp-recipe').innerHTML=`After I <strong>${c.anchor}</strong> — I will <strong>${c.behaviour}</strong> — I will notice <strong>${c.moment}</strong>`;
+  document.getElementById('comp-why').textContent=h.why+' Habit '+num+' of 10 wired in.';
+  const nb=document.getElementById('next-challenge-block');
+  nb.innerHTML=num<10?`<button class="gbtn" style="margin-bottom:10px;" onclick="startNext()">Start Challenge ${num+1} →</button>`:`<div style="text-align:center;font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:#E8C97A;margin-bottom:10px;">🏆 All 10 Complete! 🏆</div>`;
+  document.getElementById('dl-btn').style.display='none';
+  document.getElementById('badge-canvas').style.display='none';
   confetti();
 }
+function startNext(){goStep(1);renderHabits();document.getElementById('t-s1-label').textContent='Challenge '+(ci()+1)+' of 10';showNav('today');}
 function genBadge(){
-  const h=getHabit();
-  const cv=document.getElementById('badge-canvas');
-  cv.style.display='block';
+  const c=getChallenge()||((S.challenges||[]).filter(x=>x.complete).pop());if(!c)return;
+  const h=getChallengeHabit(c);
+  const cv=document.getElementById('badge-canvas');cv.style.display='block';
   const W=560,H=220;cv.width=W;cv.height=H;
   const ctx=cv.getContext('2d');
   ctx.fillStyle='#0B1A12';ctx.fillRect(0,0,W,H);
   ctx.strokeStyle='#C8A95B';ctx.lineWidth=1;ctx.strokeRect(8,8,W-16,H-16);
   ctx.textAlign='center';
-  ctx.fillStyle='#C8A95B';ctx.font='700 9px sans-serif';ctx.fillText('12% METABOLIC HEALTH CLUB',W/2,32);
-  ctx.fillStyle='rgba(200,169,91,0.15)';ctx.fillRect(32,40,W-64,1);
-  ctx.fillStyle='#fff';ctx.font='700 30px sans-serif';ctx.fillText('12%',W/2,82);
-  ctx.fillStyle='#C8A95B';ctx.font='400 8px sans-serif';ctx.fillText('CLUB',W/2,96);
-  ctx.fillStyle='rgba(200,169,91,0.15)';ctx.fillRect(32,106,W-64,1);
-  ctx.fillStyle='#0D2119';ctx.fillRect(32,114,W-64,62);
-  ctx.fillStyle='rgba(90,122,102,0.9)';ctx.font='700 8px sans-serif';ctx.fillText('I COMPLETED THE 5-DAY TINY HABIT CHALLENGE',W/2,134);
-  ctx.fillStyle='#fff';ctx.font='700 13px sans-serif';ctx.fillText(h.t.toUpperCase()+' · 5 DAYS',W/2,154);
-  ctx.fillStyle='rgba(168,196,176,0.8)';ctx.font='400 11px sans-serif';ctx.fillText('"Make it so small you can\'t say no." — BJ Fogg',W/2,174);
-  ctx.fillStyle='rgba(200,169,91,0.15)';ctx.fillRect(32,184,W-64,1);
-  ctx.fillStyle='rgba(200,169,91,0.45)';ctx.font='400 8px sans-serif';ctx.fillText('ADAPTED FROM TINYHABITS.COM · join12percent.com',W/2,200);
+  ctx.fillStyle='#C8A95B';ctx.font='700 9px sans-serif';ctx.fillText('12% METABOLIC HEALTH CLUB · 50-DAY HABIT STACK',W/2,30);
+  ctx.fillStyle='rgba(200,169,91,0.15)';ctx.fillRect(32,38,W-64,1);
+  ctx.fillStyle='#fff';ctx.font='700 28px sans-serif';ctx.fillText('12%',W/2,78);
+  ctx.fillStyle='#C8A95B';ctx.font='400 8px sans-serif';ctx.fillText('CHALLENGE '+c.num+' OF 10 · COMPLETE',W/2,94);
+  ctx.fillStyle='rgba(200,169,91,0.15)';ctx.fillRect(32,104,W-64,1);
+  ctx.fillStyle='#0D2119';ctx.fillRect(32,112,W-64,64);
+  ctx.fillStyle='rgba(90,122,102,0.9)';ctx.font='700 8px sans-serif';ctx.fillText('I COMPLETED THE 5-DAY TINY HABIT CHALLENGE',W/2,132);
+  ctx.fillStyle='#fff';ctx.font='700 13px sans-serif';ctx.fillText(h.t.toUpperCase()+' · 5 DAYS',W/2,152);
+  ctx.fillStyle='rgba(168,196,176,0.8)';ctx.font='400 11px sans-serif';ctx.fillText('"Make it so small you can\'t say no." — BJ Fogg',W/2,172);
+  ctx.fillStyle='rgba(200,169,91,0.15)';ctx.fillRect(32,182,W-64,1);
+  ctx.fillStyle='rgba(200,169,91,0.45)';ctx.font='400 8px sans-serif';ctx.fillText('ADAPTED FROM TINYHABITS.COM · join12percent.com',W/2,198);
   document.getElementById('dl-btn').style.display='block';
 }
-function dlBadge(){const a=document.createElement('a');a.download='12percent_tiny_habit.png';a.href=document.getElementById('badge-canvas').toDataURL();a.click();}
-function resetAll(){S={};save();renderHabits();document.getElementById('custom-title').value='';document.getElementById('custom-anchor').value='';go(1);}
+function dlBadge(){const a=document.createElement('a');a.download='12percent_challenge.png';a.href=document.getElementById('badge-canvas').toDataURL();a.click();}
+function renderJourney(){
+  const list=document.getElementById('journey-list');
+  const completed=(S.challenges||[]).filter(c=>c.complete);
+  if(completed.length===0){list.innerHTML='<div style="font-size:12px;color:rgba(255,255,255,0.3);padding:20px 0;">Complete your first challenge to build your stack.</div>';return;}
+  list.innerHTML=completed.map((c,i)=>{
+    const h=getChallengeHabit(c);
+    const feels=Array.from({length:5},(_,d)=>c.feels&&c.feels['d'+(d+1)]||'⭐').join('');
+    return `<div class="stack-item"><span class="si-num">${String(c.num).padStart(2,'0')}</span><span class="si-emoji">${h.emoji}</span><div style="flex:1;"><div class="si-title">${h.t}</div><div style="font-family:'Syne Mono',monospace;font-size:7px;color:rgba(255,255,255,0.2);margin-top:2px;">${c.completedDate||''}</div></div><span class="si-feels">${feels}</span></div>`;
+  }).join('');
+}
 function confetti(){
   const w=document.getElementById('confetti');w.innerHTML='';
   const cols=['#C8A95B','#5DCAA5','#E8C97A','#fff','#1D9E75'];
-  const st=document.createElement('style');
-  st.textContent='@keyframes cf{to{transform:translateY(105vh) rotate(700deg);opacity:0}}';
-  document.head.appendChild(st);
+  const st=document.createElement('style');st.textContent='@keyframes cf{to{transform:translateY(105vh) rotate(700deg);opacity:0}}';document.head.appendChild(st);
   for(let i=0;i<30;i++){const d=document.createElement('div');const sz=Math.random()*6+3;d.style.cssText=`position:absolute;width:${sz}px;height:${sz}px;left:${Math.random()*100}%;top:-8px;background:${cols[i%cols.length]};animation:cf ${1+Math.random()*1.2}s ${Math.random()*0.5}s ease-in forwards;border-radius:${i%3===0?'50%':'0'}`;w.appendChild(d);}
   setTimeout(()=>w.innerHTML='',3000);
 }
-load();renderHabits();
-if(S.days&&dc()===5){renderTracker();showDone();go(4);}
-else if(S.hid&&S.anchor&&S.startDate){renderTracker();go(3);}
+load();renderStack();
 </script>
 </body>
 </html>
