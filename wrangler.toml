@@ -1,0 +1,7 @@
+name = "metabolic-spark"
+main = "worker.js"
+compatibility_date = "2024-01-01"
+
+[[kv_namespaces]]
+binding = "METABOLIC_SPARK"
+id = "5b109a077c9e45c68c39e1b986239c45"
