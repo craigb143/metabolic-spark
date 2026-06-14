@@ -136,6 +136,22 @@ canvas{width:100%;border:1px solid rgba(200,169,91,0.2);margin-bottom:7px;displa
 .si-title{font-size:11px;font-weight:700;color:#fff;flex:1;}
 .si-feels{font-size:12px;letter-spacing:2px;}
 .confetti-wrap{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999;}
+/* LOGIN */
+.login-screen{position:fixed;inset:0;background:#0B1A12;z-index:500;display:flex;align-items:center;justify-content:center;padding:24px;}
+.login-screen.hide{display:none;}
+.login-box{width:100%;max-width:380px;}
+.login-brand{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;color:#fff;margin-bottom:4px;}
+.login-brand span{color:#C8A95B;}
+.login-sub{font-family:'Syne Mono',monospace;font-size:8px;letter-spacing:0.3em;color:#C8A95B;text-transform:uppercase;margin-bottom:28px;display:block;}
+.login-label{font-family:'Syne Mono',monospace;font-size:8px;letter-spacing:0.2em;color:#C8A95B;text-transform:uppercase;display:block;margin-bottom:6px;}
+.login-inp{width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(200,169,91,0.3);color:#fff;padding:13px 14px;font-size:15px;font-family:'Syne',sans-serif;outline:none;margin-bottom:10px;}
+.login-inp:focus{border-color:#C8A95B;}
+.login-hint{font-size:11px;color:rgba(255,255,255,0.25);margin-bottom:20px;line-height:1.5;}
+.login-err{font-size:11px;color:#F09595;margin-bottom:10px;display:none;}
+.sync-bar{position:fixed;bottom:0;left:0;right:0;background:rgba(11,26,18,0.95);border-top:1px solid rgba(200,169,91,0.15);padding:8px 16px;display:flex;align-items:center;justify-content:space-between;font-family:'Syne Mono',monospace;font-size:8px;color:rgba(255,255,255,0.2);z-index:100;}
+.sync-dot{width:6px;height:6px;border-radius:50%;background:#1D9E75;margin-right:6px;display:inline-block;}
+.sync-dot.syncing{background:#C8A95B;animation:pulse 1s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
 </style>
 </head>
 <body>
@@ -257,33 +273,117 @@ canvas{width:100%;border:1px solid rgba(200,169,91,0.2);margin-bottom:7px;displa
     <button class="gbtn" onclick="document.getElementById('fifty-overlay').classList.add('hide');showNav('journey');">See my full stack →</button>
   </div>
 </div>
+<!-- LOGIN SCREEN -->
+<div class="login-screen" id="login-screen">
+  <div class="login-box">
+    <div class="login-brand"><span>12%</span> Metabolic Spark</div>
+    <span class="login-sub">50-day habit stack</span>
+    <span class="login-label">Your email</span>
+    <input class="login-inp" id="login-email" type="email" placeholder="you@example.com" autocomplete="email">
+    <div class="login-hint">Your progress saves to the cloud — survives any device or browser. We don't send marketing emails to this address.</div>
+    <div class="login-err" id="login-err">Please enter a valid email address.</div>
+    <button class="gbtn" onclick="doLogin()" style="margin-bottom:0;">Start my stack →</button>
+  </div>
+</div>
+
+<!-- SYNC BAR -->
+<div class="sync-bar" id="sync-bar" style="display:none;">
+  <div><span class="sync-dot" id="sync-dot"></span><span id="sync-label">Saved to cloud</span></div>
+  <span id="sync-email" style="color:rgba(200,169,91,0.4);"></span>
+</div>
+
 <div class="confetti-wrap" id="confetti"></div>
 <script>
 const HABITS=[
-  {id:1,t:'1 Squat After the Bathroom',emoji:'🦵',anchor:'finish using the bathroom',b:'do 1 squat',why:'Movement anchored to an existing trigger builds muscle memory fast. One squat becomes two, then five — automatically.'},
-  {id:2,t:'1 Push-Up Before the Shower',emoji:'💪',anchor:'turn on the shower',b:'do 1 push-up',why:'Upper body activation before your day. So small it feels silly — which means you\'ll always do it.'},
-  {id:3,t:'1 Box Breath Before Your Phone',emoji:'🫁',anchor:'reach for my phone in the morning',b:'take 1 box breath (4 in, hold 4, out 4, hold 4)',why:'Breaks the cortisol spike of immediate screen exposure. One breath resets your nervous system before the noise begins.'},
-  {id:4,t:'1 Glass of Water on Waking',emoji:'💧',anchor:'turn off my alarm',b:'drink 1 full glass of water',why:'Rehydrates after 7-8 hours of no fluid. Reduces false hunger signals and supports insulin sensitivity from the first hour.'},
-  {id:5,t:'30-Second Stretch at the Kettle',emoji:'🧘',anchor:'switch the kettle on',b:'do a 30-second stretch while I wait',why:'Sedentary time accumulates fast. A daily stretch anchored to the kettle becomes automatic within days.'},
-  {id:6,t:'2-Minute Walk After Meals',emoji:'🚶',anchor:'put my fork down after eating',b:'walk for 2 minutes',why:'Muscles absorb glucose without insulin after meals. Even 2 minutes cuts the post-meal glucose spike measurably.'},
-  {id:7,t:'1 Minute of Morning Sunlight',emoji:'☀️',anchor:'step outside in the morning',b:'stand in the sunlight for 1 minute',why:'Morning light sets your circadian rhythm, improves sleep quality, and helps regulate cortisol throughout the day.'},
-  {id:8,t:'1 Bite of Protein at Breakfast',emoji:'🥚',anchor:'sit down for breakfast',b:'eat at least one bite of protein first',why:'Even a small amount of protein at breakfast blunts the morning glucose spike and extends satiety.'},
-  {id:9,t:'Write 1 Gratitude Before Bed',emoji:'📓',anchor:'get into bed',b:'write down 1 thing I\'m grateful for',why:'Evening gratitude lowers cortisol before sleep, improving sleep architecture and overnight blood sugar.'},
-  {id:10,t:'Phone Down 5 Minutes Earlier',emoji:'📵',anchor:'notice I\'m scrolling before bed',b:'put my phone down and don\'t pick it up again',why:'Reducing evening screen time lowers cortisol and blue light exposure, improving sleep onset and overnight glucose.'}
+  {id:1,t:'1 Squat After the Bathroom',emoji:'🦵',anchor:'finish using the bathroom',b:'do 1 squat',category:'movement',why:'Movement anchored to an existing trigger builds muscle memory fast. One squat becomes two, then five — automatically.'},
+  {id:2,t:'1 Push-Up Before the Shower',emoji:'💪',anchor:'turn on the shower',b:'do 1 push-up',category:'movement',why:'Upper body activation before your day. So small it feels silly — which means you\'ll always do it.'},
+  {id:3,t:'1 Box Breath Before Your Phone',emoji:'🫁',anchor:'reach for my phone in the morning',b:'take 1 box breath (4 in, hold 4, out 4, hold 4)',category:'breath',why:'Breaks the cortisol spike of immediate screen exposure. One breath resets your nervous system before the noise begins.'},
+  {id:4,t:'1 Glass of Water on Waking',emoji:'💧',anchor:'turn off my alarm',b:'drink 1 full glass of water',category:'hydration',why:'Rehydrates after 7-8 hours of no fluid. Reduces false hunger signals and supports insulin sensitivity from the first hour.'},
+  {id:5,t:'30-Second Stretch at the Kettle',emoji:'🧘',anchor:'switch the kettle on',b:'do a 30-second stretch while I wait',category:'stretch',why:'Sedentary time accumulates fast. A daily stretch anchored to the kettle becomes automatic within days.'},
+  {id:6,t:'2-Minute Walk After Meals',emoji:'🚶',anchor:'put my fork down after eating',b:'walk for 2 minutes',category:'movement',why:'Muscles absorb glucose without insulin after meals. Even 2 minutes cuts the post-meal glucose spike measurably.'},
+  {id:7,t:'1 Minute of Morning Sunlight',emoji:'☀️',anchor:'step outside in the morning',b:'stand in the sunlight for 1 minute',category:'sunlight',why:'Morning light sets your circadian rhythm, improves sleep quality, and helps regulate cortisol throughout the day.'},
+  {id:8,t:'1 Bite of Protein at Breakfast',emoji:'🥚',anchor:'sit down for breakfast',b:'eat at least one bite of protein first',category:'nutrition',why:'Even a small amount of protein at breakfast blunts the morning glucose spike and extends satiety.'},
+  {id:9,t:'Write 1 Gratitude Before Bed',emoji:'📓',anchor:'get into bed',b:'write down 1 thing I\'m grateful for',category:'gratitude',why:'Evening gratitude lowers cortisol before sleep, improving sleep architecture and overnight blood sugar.'},
+  {id:10,t:'Phone Down 5 Minutes Earlier',emoji:'📵',anchor:'notice I\'m scrolling before bed',b:'put my phone down and don\'t pick it up again',category:'screen',why:'Reducing evening screen time lowers cortisol and blue light exposure, improving sleep onset and overnight glucose.'}
 ];
 const LESSONS=[
   {l:'Day 1 — Do it once',t:'<strong>One repetition. That\'s the whole job today.</strong> The anchor fires, you do the tiny behaviour, you notice how it feels. So small you can\'t say no.'},
-  {l:'Day 2 — Why it works',t:'<strong>Today you understand the mechanism.</strong> Your tiny habit targets a specific signal in your biology. When you feel like skipping — you\'re not skipping a habit, you\'re skipping the signal.'},
+  {l:'Day 2 — Why it works',t:'DAY2_DYNAMIC'},
   {l:'Day 3 — The wobble',t:'<strong>Day 3 is where most people quietly stop.</strong> That\'s not failure — that\'s data. Troubleshoot: was the anchor clear? Was the behaviour truly tiny? Adjust one thing and go again.'},
   {l:'Day 4 — Identity',t:'<strong>Four repetitions in. Something has shifted.</strong> Say it out loud: "I\'m the kind of person who does this every day."'},
   {l:'Day 5 — Graduate',t:'<strong>Five days. One tiny habit. Done.</strong> BJ Fogg says tiny habits grow naturally once they\'re wired in. You\'ve done the wiring. Now stack the next one.'}
 ];
 const DAY_REWARDS=['⭐','🔥','🔥🔥','🏅','🏆'];
 const CHALLENGE_TROPHIES=['⭐','🥉','🥈','🥇','💎','🔥','⚡','🌟','👑','🏆'];
-let S={},pendingFeel=null;
-const LS='12pct_stack2';
-function load(){try{S=JSON.parse(localStorage.getItem(LS)||'{}')}catch(e){S={};}}
-function save(){localStorage.setItem(LS,JSON.stringify(S));}
+const WORKER='https://metabolic-spark.craig-591.workers.dev';
+let S={},pendingFeel=null,userEmail='';
+
+function getEmail(){return localStorage.getItem('12pct_email')||'';}
+function setEmail(e){localStorage.setItem('12pct_email',e);}
+
+async function cloudLoad(email){
+  try{
+    const r=await fetch(WORKER+'?email='+encodeURIComponent(email));
+    const d=await r.json();
+    return d||{};
+  }catch(e){return{};}
+}
+
+async function cloudSave(data){
+  setSyncStatus('syncing');
+  try{
+    await fetch(WORKER+'?email='+encodeURIComponent(userEmail),{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(data)
+    });
+    // also save locally as backup
+    localStorage.setItem('12pct_backup',JSON.stringify(data));
+    setSyncStatus('saved');
+  }catch(e){
+    // fall back to local only
+    localStorage.setItem('12pct_backup',JSON.stringify(data));
+    setSyncStatus('offline');
+  }
+}
+
+function setSyncStatus(status){
+  const dot=document.getElementById('sync-dot');
+  const lbl=document.getElementById('sync-label');
+  if(!dot)return;
+  if(status==='syncing'){dot.className='sync-dot syncing';lbl.textContent='Saving...';}
+  else if(status==='saved'){dot.className='sync-dot';lbl.textContent='Saved to cloud';}
+  else{dot.className='sync-dot';dot.style.background='#C8A95B';lbl.textContent='Saved locally';}
+}
+
+async function doLogin(){
+  const email=document.getElementById('login-email').value.trim();
+  if(!email||!email.includes('@')){document.getElementById('login-err').style.display='block';return;}
+  document.getElementById('login-err').style.display='none';
+  userEmail=email;
+  setEmail(email);
+  // load from cloud
+  const data=await cloudLoad(email);
+  // if cloud empty, check local backup
+  if(!data||!data.challenges){
+    const backup=localStorage.getItem('12pct_backup');
+    if(backup){try{S=JSON.parse(backup);}catch(e){S={};}}
+    else S={};
+  } else {
+    S=data;
+  }
+  document.getElementById('login-screen').classList.add('hide');
+  document.getElementById('sync-bar').style.display='flex';
+  document.getElementById('sync-email').textContent=email;
+  renderStack();
+}
+
+function save(){
+  // always save locally immediately
+  localStorage.setItem('12pct_backup',JSON.stringify(S));
+  // then sync to cloud async
+  cloudSave(S);
+}
 function ci(){return S.challenges?S.challenges.length:0;}
 function currentChallenge(){return S.challenges&&S.challenges.length>0?S.challenges[S.challenges.length-1]:null;}
 function hasActiveChallenge(){const c=currentChallenge();return c&&!c.complete;}
@@ -418,7 +518,33 @@ function renderTracker(){
   else{btn.style.cssText='width:100%;padding:12px;font-family:Syne,sans-serif;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;margin-bottom:7px;display:block;background:#1D9E75!important;color:#fff!important;border:none!important;outline:none;';}
   ub.style.display=todayDone?'block':'none';
   const l=LESSONS[di];
-  document.getElementById('lesson').innerHTML=`<div class="lesson-lbl">${l.l}</div><div class="lesson-txt">${l.t}</div>`;
+  let lessonHTML;
+  if(di===1){
+    const category=h.category||'mindset';
+    const catMap={
+      movement:'<strong>Movement</strong> activates your muscles to absorb glucose from the bloodstream without requiring insulin — lowering blood sugar in real time.',
+      breath:'<strong>Breathing and mindset</strong> directly lower cortisol. Cortisol raises blood sugar even without food — so resetting your nervous system before the day starts is a metabolic act.',
+      hydration:'<strong>Hydration</strong> reduces false hunger signals and supports insulin sensitivity from the first hour of the day.',
+      stretch:'<strong>Movement and mobility</strong> break up sedentary glucose accumulation. Even 30 seconds of movement resets your body\'s baseline.',
+      nutrition:'<strong>Nutrition timing</strong> — specifically protein and fibre — controls how fast glucose enters your bloodstream, blunting spikes before they start.',
+      sunlight:'<strong>Sunlight</strong> sets your circadian rhythm, which regulates the hormones that control blood sugar, appetite, and sleep quality.',
+      gratitude:'<strong>Sleep quality</strong> is one of the five metabolic markers. Evening cortisol determines how well you recover overnight — and gratitude is one of the few things that genuinely lowers it.',
+      screen:'<strong>Screen and sleep</strong> — blue light and cortisol before bed disrupt sleep architecture, which directly raises fasting glucose by morning.'
+    };
+    const catLine=catMap[category]||`<strong>Your habit</strong> targets a specific signal in your biology.`;
+    lessonHTML=`<div class="lesson-lbl">Day 2 — Why it works</div><div class="lesson-txt">
+      <strong>Today you find out why your habit works — not just that it does.</strong><br><br>
+      Most health advice gives you the what without the why. Eat this. Avoid that. Walk more.<br><br>
+      The 12% Metabolic Health Club does it differently. When you understand the mechanism — the actual biology behind the behaviour — motivation becomes self-generating. You\'re not following instructions. You\'re working with your own physiology.<br><br>
+      ${catLine}<br><br>
+      <em style="color:rgba(200,169,91,0.8);">${h.why}</em><br><br>
+      Do your habit again today. After doing it, take 60 seconds to notice one thing: did your body respond differently? Post what you noticed in the community — even if it\'s small.<br><br>
+      <strong style="color:#C8A95B;">THIS IS HOW THE 12% OPERATE</strong>
+    </div>`;
+  } else {
+    lessonHTML=`<div class="lesson-lbl">${l.l}</div><div class="lesson-txt">${l.t}</div>`;
+  }
+  document.getElementById('lesson').innerHTML=lessonHTML;
 }
 function markToday(){
   const c=getChallenge();if(!c)return;
@@ -514,7 +640,28 @@ function confetti(){
   for(let i=0;i<30;i++){const d=document.createElement('div');const sz=Math.random()*6+3;d.style.cssText=`position:absolute;width:${sz}px;height:${sz}px;left:${Math.random()*100}%;top:-8px;background:${cols[i%cols.length]};animation:cf ${1+Math.random()*1.2}s ${Math.random()*0.5}s ease-in forwards;border-radius:${i%3===0?'50%':'0'}`;w.appendChild(d);}
   setTimeout(()=>w.innerHTML='',3000);
 }
-load();renderStack();
+// Init — check if already logged in
+async function init(){
+  const email=getEmail();
+  if(email){
+    userEmail=email;
+    document.getElementById('login-email').value=email;
+    // load from cloud
+    const data=await cloudLoad(email);
+    if(data&&data.challenges){
+      S=data;
+    } else {
+      // fall back to local backup
+      const backup=localStorage.getItem('12pct_backup');
+      if(backup){try{S=JSON.parse(backup);}catch(e){S={};}}
+    }
+    document.getElementById('login-screen').classList.add('hide');
+    document.getElementById('sync-bar').style.display='flex';
+    document.getElementById('sync-email').textContent=email;
+  }
+  renderStack();
+}
+init();
 </script>
 </body>
 </html>
