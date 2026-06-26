@@ -214,6 +214,7 @@ canvas{width:100%;border:1px solid rgba(200,169,91,0.2);margin-bottom:7px;displa
     <button class="gbtn-teal gbtn" id="today-btn" onclick="markToday()"></button>
     <button class="undo-lnk" id="undo-btn" onclick="undoToday()" style="display:none">undo today's check-in</button>
     <div class="lesson" id="lesson"></div>
+    <button class="gbtn" style="margin-top:6px;opacity:0.6;" onclick="abandonChallenge()">← Switch to a different habit</button>
   </div>
   <div class="step" id="t-s4">
     <div style="text-align:center;padding:8px 0 12px;">
@@ -245,6 +246,10 @@ canvas{width:100%;border:1px solid rgba(200,169,91,0.2);margin-bottom:7px;displa
 <div class="screen" id="screen-journey">
   <div style="font-family:'Syne Mono',monospace;font-size:8px;color:#C8A95B;text-transform:uppercase;letter-spacing:0.2em;margin-bottom:12px;">Your habit stack</div>
   <div class="stack-list" id="journey-list"></div>
+  <div style="margin-top:20px;border-top:1px solid rgba(255,255,255,0.05);padding-top:16px;">
+    <button class="gbtn" onclick="freshStart()" style="opacity:0.5;font-size:9px;">Reset everything &amp; start fresh</button>
+    <div style="font-size:10px;color:rgba(255,255,255,0.2);text-align:center;margin-top:4px;">This clears your full stack history</div>
+  </div>
   <div class="tagline" style="margin-top:10px;">Every habit you complete lives here forever</div>
 </div>
 <div class="feel-overlay hide" id="feel-overlay">
@@ -295,16 +300,15 @@ canvas{width:100%;border:1px solid rgba(200,169,91,0.2);margin-bottom:7px;displa
 <div class="confetti-wrap" id="confetti"></div>
 <script>
 const HABITS=[
-  {id:1,t:'1 Squat After the Bathroom',emoji:'🦵',anchor:'finish using the bathroom',b:'do 1 squat',category:'movement',why:'Movement anchored to an existing trigger builds muscle memory fast. One squat becomes two, then five — automatically.'},
-  {id:2,t:'1 Push-Up Before the Shower',emoji:'💪',anchor:'turn on the shower',b:'do 1 push-up',category:'movement',why:'Upper body activation before your day. So small it feels silly — which means you\'ll always do it.'},
-  {id:3,t:'1 Box Breath Before Your Phone',emoji:'🫁',anchor:'reach for my phone in the morning',b:'take 1 box breath (4 in, hold 4, out 4, hold 4)',category:'breath',why:'Breaks the cortisol spike of immediate screen exposure. One breath resets your nervous system before the noise begins.'},
-  {id:4,t:'1 Glass of Water on Waking',emoji:'💧',anchor:'turn off my alarm',b:'drink 1 full glass of water',category:'hydration',why:'Rehydrates after 7-8 hours of no fluid. Reduces false hunger signals and supports insulin sensitivity from the first hour.'},
-  {id:5,t:'30-Second Stretch at the Kettle',emoji:'🧘',anchor:'switch the kettle on',b:'do a 30-second stretch while I wait',category:'stretch',why:'Sedentary time accumulates fast. A daily stretch anchored to the kettle becomes automatic within days.'},
-  {id:6,t:'2-Minute Walk After Meals',emoji:'🚶',anchor:'put my fork down after eating',b:'walk for 2 minutes',category:'movement',why:'Muscles absorb glucose without insulin after meals. Even 2 minutes cuts the post-meal glucose spike measurably.'},
-  {id:7,t:'1 Minute of Morning Sunlight',emoji:'☀️',anchor:'step outside in the morning',b:'stand in the sunlight for 1 minute',category:'sunlight',why:'Morning light sets your circadian rhythm, improves sleep quality, and helps regulate cortisol throughout the day.'},
-  {id:8,t:'1 Bite of Protein at Breakfast',emoji:'🥚',anchor:'sit down for breakfast',b:'eat at least one bite of protein first',category:'nutrition',why:'Even a small amount of protein at breakfast blunts the morning glucose spike and extends satiety.'},
-  {id:9,t:'Write 1 Gratitude Before Bed',emoji:'📓',anchor:'get into bed',b:'write down 1 thing I\'m grateful for',category:'gratitude',why:'Evening gratitude lowers cortisol before sleep, improving sleep architecture and overnight blood sugar.'},
-  {id:10,t:'Phone Down 5 Minutes Earlier',emoji:'📵',anchor:'notice I\'m scrolling before bed',b:'put my phone down and don\'t pick it up again',category:'screen',why:'Reducing evening screen time lowers cortisol and blue light exposure, improving sleep onset and overnight glucose.'}
+  {id:1,t:'Protein at Breakfast',emoji:'🥚',anchor:'sit down for breakfast',b:'eat at least one bite of protein first',category:'nutrition',why:'Even a small amount of protein at breakfast blunts the morning glucose spike, slows gastric emptying, and extends satiety for hours. It changes what the rest of your day looks like before 9am.'},
+  {id:2,t:'2-Min Walk After Meals',emoji:'🚶',anchor:'put my fork down after eating',b:'walk for 2 minutes',category:'movement',why:'Muscles absorb glucose from the bloodstream without requiring insulin after meals. Even 2 minutes of walking measurably cuts the post-meal glucose spike — one of the most powerful metabolic levers you have.'},
+  {id:3,t:'Bedtime 5 Minutes Earlier',emoji:'😴',anchor:'set my evening alarm',b:'go to bed 5 minutes earlier than last night',category:'sleep',why:'Sleep is one of the five metabolic markers. Cortisol and insulin resistance both worsen with poor sleep. Five minutes earlier compounds — in a week that\'s 35 minutes. Sleep is where metabolic repair happens.'},
+  {id:4,t:'Phone Down 5 Minutes Earlier',emoji:'📵',anchor:'notice I\'m on my phone before bed',b:'put my phone down and leave it down',category:'screen',why:'Blue light and cortisol from screens before bed delay sleep onset and disrupt sleep architecture. Even 5 minutes earlier compounds into meaningfully better overnight blood sugar by morning.'},
+  {id:5,t:'Squat or Push-Up After the Bathroom',emoji:'🦵',anchor:'finish using the bathroom',b:'do 1 squat or 1 push-up',category:'movement',why:'Movement anchored to a high-frequency trigger builds muscle memory fast. You use the bathroom 6-8 times a day — that\'s up to 8 reps without thinking about it. One becomes five within weeks.'},
+  {id:6,t:'1 Glass of Water on Waking',emoji:'💧',anchor:'turn off my alarm',b:'drink 1 full glass of water before anything else',category:'hydration',why:'After 7-8 hours of no fluid, you wake up mildly dehydrated. Dehydration raises cortisol, which raises blood sugar — before you\'ve eaten a thing. One glass resets this within minutes.'},
+  {id:7,t:'1 Minute of Morning Sunlight',emoji:'☀️',anchor:'step outside in the morning',b:'stand in natural light for 1 minute',category:'sunlight',why:'Morning sunlight sets your circadian rhythm by triggering cortisol at the right time — which means it drops at the right time too. This directly regulates appetite hormones and overnight blood sugar.'},
+  {id:8,t:'1 Box Breath After First Phone Use',emoji:'🫁',anchor:'put my phone down after using it for the first time today',b:'take 1 box breath — 4 counts in, hold 4, out 4, hold 4',category:'breath',why:'Your first phone use of the day spikes cortisol. Cortisol raises blood sugar directly — even without food. One box breath activates the parasympathetic nervous system and resets your baseline before the day accelerates.'},
+  {id:9,t:'1 Gratitude Before Bed',emoji:'📓',anchor:'get into bed',b:'write down or say 1 thing I\'m grateful for',category:'gratitude',why:'Evening gratitude measurably lowers cortisol before sleep. Lower pre-sleep cortisol means better sleep architecture — and better sleep is one of the most direct levers for overnight blood sugar regulation.'}
 ];
 const LESSONS=[
   {l:'Day 1 — Do it once',t:'<strong>One repetition. That\'s the whole job today.</strong> The anchor fires, you do the tiny behaviour, you notice how it feels. So small you can\'t say no.'},
@@ -417,14 +421,15 @@ function renderStack(){
     if(isComplete)cls+=' complete';
     else if(isActive)cls+=' active-challenge';
     else if(isLocked)cls+=' locked';
-    const habit=challenge?HABITS.find(h=>h.id===challenge.hid)||(challenge.custom?{t:challenge.customTitle,emoji:'✨'}:HABITS[0]):null;
+    const habitData=challenge?HABITS.find(h=>h.id===challenge.hid)||(challenge.custom?{t:challenge.customTitle,emoji:'✨'}:HABITS[0]):null;
+    const isCustomSlot=i===9&&!challenge;
     const daysArr=challenge?Object.values(challenge.days||{}).filter(Boolean).length:0;
     const dots=Array.from({length:5},(_,d)=>`<div class="sc-day-dot${challenge&&challenge.days&&challenge.days['d'+(d+1)]?' done':''}"></div>`).join('');
     const onclick=isActive?`showNav('today')`:isNext?`showNav('today')`:isComplete?`showNav('journey')`:``;
     grid.innerHTML+=`<div class="${cls}" onclick="${onclick}">
       <div class="sc-num">${String(i+1).padStart(2,'0')}</div>
-      <div class="sc-emoji">${habit?habit.emoji:(isNext?'➕':'🔒')}</div>
-      <div class="sc-title">${habit?habit.t:(isNext?'Start challenge '+(i+1):'Locked')}</div>
+      <div class="sc-emoji">${habitData?habitData.emoji:(isCustomSlot?'✨':isNext?'➕':'🔒')}</div>
+      <div class="sc-title">${habitData?habitData.t:(isCustomSlot?'Your own habit':isNext?'Start challenge '+(i+1):'Locked')}</div>
       <div class="sc-status ${isComplete?'done':isActive?'active':''}">${isComplete?'Complete ✓':isActive?'In progress · Day '+daysArr+'/5':isNext?'Tap to start':'Locked'}</div>
       ${challenge?`<div class="sc-days">${dots}</div>`:''}
       ${isComplete?`<div class="sc-badge">${CHALLENGE_TROPHIES[i]}</div>`:''}
@@ -443,7 +448,7 @@ function renderToday(){
 }
 function goStep(n){document.querySelectorAll('#screen-today .step').forEach(s=>s.classList.remove('show'));document.getElementById('t-s'+n).classList.add('show');window.scrollTo(0,0);}
 function renderHabits(){
-  const usedIds=(S.challenges||[]).filter(c=>c.complete).map(c=>c.hid);
+  const usedIds=(S.challenges||[]).filter(c=>c.complete&&!c.custom).map(c=>c.hid);
   document.getElementById('hlist').innerHTML=HABITS.map(h=>{
     const used=usedIds.includes(h.id);
     return `<div class="hrow${S.pendingHid===h.id?' sel':''}${used?' used':''}" onclick="${used?'':'pickH('+h.id+')'}">
@@ -529,6 +534,7 @@ function renderTracker(){
       nutrition:'<strong>Nutrition timing</strong> — specifically protein and fibre — controls how fast glucose enters your bloodstream, blunting spikes before they start.',
       sunlight:'<strong>Sunlight</strong> sets your circadian rhythm, which regulates the hormones that control blood sugar, appetite, and sleep quality.',
       gratitude:'<strong>Sleep quality</strong> is one of the five metabolic markers. Evening cortisol determines how well you recover overnight — and gratitude is one of the few things that genuinely lowers it.',
+      sleep:'<strong>Sleep</strong> is one of the five metabolic markers. Cortisol and insulin resistance both worsen with poor or late sleep. Going to bed even 5 minutes earlier compounds — sleep is where metabolic repair happens.',
       screen:'<strong>Screen and sleep</strong> — blue light and cortisol before bed disrupt sleep architecture, which directly raises fasting glucose by morning.'
     };
     const catLine=catMap[category]||`<strong>Your habit</strong> targets a specific signal in your biology.`;
@@ -622,7 +628,27 @@ function genBadge(){
   ctx.fillStyle='rgba(200,169,91,0.45)';ctx.font='400 8px sans-serif';ctx.fillText('ADAPTED FROM TINYHABITS.COM · join12percent.com',W/2,198);
   document.getElementById('dl-btn').style.display='block';
 }
-function dlBadge(){const a=document.createElement('a');a.download='12percent_challenge.png';a.href=document.getElementById('badge-canvas').toDataURL();a.click();}
+function abandonChallenge(){
+  if(!confirm('Switch to a different habit? Your current progress on this challenge will be lost, but your completed challenges stay saved.')) return;
+  // remove the current incomplete challenge
+  if(S.challenges&&S.challenges.length>0){
+    const last=S.challenges[S.challenges.length-1];
+    if(!last.complete) S.challenges.pop();
+  }
+  delete S.pendingHid;
+  save();
+  goStep(1);
+  renderHabits();
+  document.getElementById('t-s1-label').textContent='Challenge '+(ci()+1)+' of 10';
+}
+
+function freshStart(){
+  if(!confirm('This will clear your entire stack history and start from scratch. Are you sure?')) return;
+  S={};
+  save();
+  renderStack();
+  showNav('stack');
+}
 function renderJourney(){
   const list=document.getElementById('journey-list');
   const completed=(S.challenges||[]).filter(c=>c.complete);
